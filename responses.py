@@ -23,13 +23,17 @@ def getResponse(user_input : str) -> str:
     return "I don't know what you mean by that."
 
 def getAiResponse(user_input : str) -> str:
-    response = client.completions.create(
-        model="gpt-3.5-turbo-instruct",
-        prompt=user_input,
-        temperature=1,
-        max_tokens=200,
-        top_p=0.8,
-        frequency_penalty=0,
-        presence_penalty=0
-        )
-    return response['choices'][0]['message']['content']
+    try:
+        response = client.completions.create(
+            model="gpt-3.5-turbo-instruct",
+            prompt=user_input,
+            temperature=1,
+            max_tokens=200,
+            top_p=0.8,
+            frequency_penalty=0,
+            presence_penalty=0
+            )
+        return response['choices'][0]['message']['content']
+    except Exception as e:
+        print(f'Error: {e}')
+        return "Sorry, I'm having trouble understanding you right now."
