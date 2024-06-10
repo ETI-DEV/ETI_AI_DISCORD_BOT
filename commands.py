@@ -1,4 +1,11 @@
+from random import randint
 from discord import Intents, Client, Message, VoiceChannel
+
+join_message = ["Just joined, what's up?", "I'm here now, what's going on?", "I've arrived, what's the plan?", "I'm here, what's up?", "I've joined, what's happening?", "I'm here now, what's up?", "I'm here, what's going on?", "I've arrived, what's going on?", "I've joined, what's up?", "I'm here, what's the plan?", "Good morning vietnam!", "Yellow, I am here", "Wassup!", "Give me a sec..."]
+leave_message = ["I'm out, see ya!", "I'm leaving, goodbye!", "I'm out, goodbye!", "I'm leaving, see ya!", "I'm out, goodbye!", "I'm leaving, see ya!", "I'm out, see ya!", "I'm leaving, goodbye!", "I'm out, goodbye!", "I'm leaving, see ya", "buh bye!", "See ya broosky", "I'm out, peace!", "I'm out, peace!", "I'm out, peace!", "I'm out, peace!"]
+command_not_found_message = ["WDYM, I don't get it :(", "I don't understand :(", "Can you repeat that :(", "I'm not sure what you mean :(", "I don't know what you mean :(", "I don't understand :(", "I'm not sure what you mean :(", "I don't understand :(", "Bro speak more clearly :(", "You need to learn to type :(", "I think you made a typo :(" ]
+
+command_list = ["join", "leave", "test", "help"]
 
 async def getCommand(message : Message, user_message : str) -> str:
     user_message = user_message.lower()
@@ -15,32 +22,46 @@ async def getCommand(message : Message, user_message : str) -> str:
         result = await test(message)
         return result
     
-    return "Command not found"
+    if user_message == "help":
+        result = await help(message)
+        return result
+    
+    return command_not_found_message[randint(0, len(command_not_found_message) - 1)]
 
 
 async def join(message : Message) -> str:
     channel = message.author.voice.channel
     try:
         await channel.connect()
-        return "Joined voice channel"
+        return join_message[randint(0, len(join_message) - 1)]
     except Exception as e:
         print(f'Error: {e}')
-        return "Error joining voice channel"
+        return "Error joining voice channel :("
     
 async def leave(message : Message) -> str:
     channel = message.guild.voice_client
     try:
         await channel.disconnect()
-        return "Left voice channel"
+        return leave_message[randint(0, len(leave_message) - 1)]
     except Exception as e:
         print(f'Error: {e}')
-        return "Error leaving voice channel"
+        return "Error leaving voice channel :("
     
 async def test(message : Message) -> str:
     channel = message.channel
     try:
-        await channel.send("Test message")
-        return "This is a the test message you have been waiting for" + message.author.mention + "!"
+        await channel.send("Hold on, I'm sending a test message...")
+        return "This is a the test message you have been waiting for" + message.author.mention + "!!!"
     except Exception as e:
         print(f'Error: {e}')
-        return "Error sending test message"
+        return "Error sending test message :("
+    
+async def help(message : Message) -> str:
+    channel = message.channel
+    try:
+        commands = ", ".join(command_list)
+        await channel.send("To use commands, type ! followed by the command name. \nFor example, to join a voice channel, type !join. \nHere is a list of commands: " + commands + ". \nTo talk to my AI, type $ followed by your message. \nTo send me a private message, type ? followed by your message. \nTo get a private message from me, use ? followed by your message.")
+        return "Here you go!"
+    except Exception as e:
+        print(f'Error: {e}')
+        return "Error sending help message :("
