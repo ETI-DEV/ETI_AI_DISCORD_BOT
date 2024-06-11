@@ -10,17 +10,21 @@ client = OpenAI(api_key=OPENAI_KEY)
 
 helloResponses = ["Sup", "Yo", "My man!", "Yellow!", "Waddup", "Hey", "Hello", "Hi", "Greetings", "Salutations", "Howdy", "Hey there", "Hey you", "Hey buddy", "Hey friend", "Hey pal"]
 goodbyeResponses = ["Goodbye", "Bye", "See ya", "Later", "Farewell", "Adios", "Cya", "Catch ya later", "Peace out", "Take care", "Goodnight", "Goodbye!", "Goodbye.", "Goodbye!", "Go away", "Bu bye"]
+message_found_message = ["WDYM, I don't get it :(", "I don't understand :(", "Can you repeat that :(", "I'm not sure what you mean :(", "I don't know what you mean :(", "I don't understand :(", "I'm not sure what you mean :(", "I don't understand :(", "Bro speak more clearly :(", "You need to learn to type :(", "I think you made a typo :(" ]
 
 def getResponse(user_input : str) -> str:
     lowered = user_input.lower()
     
-    if lowered == "hello":
+    # hello responses
+    if lowered in [response.lower() for response in helloResponses]:
         return helloResponses[randint(0, len(helloResponses) - 1)]
     
-    if lowered == "goodbye":
-        return "Goodbye!"
+    # goodbye responses
+    if lowered in [response.lower() for response in goodbyeResponses]:
+        return goodbyeResponses[randint(0, len(goodbyeResponses) - 1)]
     
-    return "I don't know what you mean by that."
+    # if no response is found
+    return message_found_message[randint(0, len(message_found_message) - 1)]
 
 def getAiResponse(user_input : str) -> str:
     try:

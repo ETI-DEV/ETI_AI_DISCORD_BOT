@@ -63,6 +63,7 @@ async def on_message(message: Message) -> None:
     user_message: str = message.content
     channel: str = str(message.channel)
 
+    # log the user messages
     print(f'{username} in {channel} said: {user_message}')
 
     await send_message(message, user_message)
